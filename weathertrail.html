@@ -1,0 +1,1628 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#18372b">
+<title>TrailWise — Know before you go</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --forest:#18372b;
+  --forest2:#244b39;
+  --moss:#66845c;
+  --sage:#dce8d8;
+  --cream:#f5f4ec;
+  --paper:#fffefa;
+  --ink:#1e3027;
+  --muted:#738077;
+  --line:#e5e9df;
+  --amber:#b7791f;
+  --red:#b84c3e;
+  --green:#397b55;
+  --shadow:0 12px 35px rgba(30,48,39,.07);
+  --shadow-hover:0 20px 45px rgba(30,48,39,.14);
+}
+
+* {box-sizing:border-box}
+
+body {
+  margin:0;
+  background:var(--cream);
+  color:var(--ink);
+  font-family:'DM Sans',sans-serif;
+}
+
+button,input,select {font:inherit}
+button {cursor:pointer}
+
+.shell {max-width:1220px;margin:auto;padding:0 28px}
+
+.topbar {
+  background:var(--forest);
+  color:white;
+}
+
+.nav {
+  height:74px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.brand {
+  display:flex;
+  align-items:center;
+  gap:11px;
+  font:800 21px Manrope,sans-serif;
+  letter-spacing:-.7px;
+}
+
+.brandmark {
+  width:37px;
+  height:37px;
+  border-radius:12px;
+  background:var(--sage);
+  color:var(--forest);
+  display:grid;
+  place-items:center;
+  font-size:23px;
+}
+
+.brand em {font-style:normal;color:#b9d0ae}
+
+.navright {
+  display:flex;
+  gap:18px;
+  align-items:center;
+  color:#d6e2d6;
+  font-size:12px;
+}
+
+.live-dot {
+  display:inline-block;
+  width:8px;
+  height:8px;
+  background:#a9d58e;
+  border-radius:50%;
+  margin-right:7px;
+  box-shadow:0 0 0 4px #a9d58e20;
+}
+
+.hero {
+  background:
+    radial-gradient(ellipse at 85% 15%,#71916a55,transparent 35%),
+    linear-gradient(115deg,#18372b,#254a37 58%,#3b6046);
+  color:white;
+  padding:49px 0 65px;
+  position:relative;
+  overflow:visible;
+}
+
+.hero:after {
+  content:"";
+  position:absolute;
+  width:330px;
+  height:330px;
+  right:-100px;
+  bottom:-180px;
+  border:1px solid #ffffff18;
+  border-radius:50%;
+  box-shadow:0 0 0 35px #ffffff08,0 0 0 70px #ffffff05;
+  pointer-events:none;
+}
+
+.eyebrow {
+  color:#c4d8b8;
+  text-transform:uppercase;
+  letter-spacing:2px;
+  font-size:11px;
+  font-weight:700;
+}
+
+.hero h1 {
+  font:800 clamp(34px,5vw,54px)/1.08 Manrope,sans-serif;
+  letter-spacing:-2px;
+  max-width:700px;
+  margin:15px 0;
+}
+
+.hero p {
+  color:#d5e0d4;
+  max-width:590px;
+  line-height:1.7;
+  margin:0 0 25px;
+  font-size:14px;
+}
+
+.search-area {
+  position:relative;
+  max-width:700px;
+  z-index:20;
+}
+
+.searchbar {
+  display:flex;
+  gap:8px;
+  background:white;
+  padding:7px;
+  border-radius:15px;
+  box-shadow:0 15px 40px #10271c55;
+  transition:.25s;
+}
+
+.searchbar:focus-within {
+  box-shadow:0 0 0 4px #c5d9bb55,0 18px 45px #10271c55;
+  transform:translateY(-2px);
+}
+
+.searchbar input {
+  flex:1;
+  min-width:0;
+  border:0;
+  outline:0;
+  padding:0 13px;
+  color:var(--ink);
+  font-size:14px;
+}
+
+.btn {
+  border:0;
+  border-radius:10px;
+  padding:12px 16px;
+  font-weight:700;
+  font-size:12px;
+  transition:.2s;
+}
+
+.btn:hover {transform:translateY(-2px)}
+.btn:active {transform:translateY(0)}
+.btn-primary {
+  background:var(--sage);
+  color:var(--forest);
+}
+.btn-primary:hover {background:#c8ddc0}
+.btn-ghost {
+  background:#ffffff16;
+  color:white;
+  border:1px solid #ffffff35;
+}
+.btn-ghost:hover {background:#ffffff28}
+.btn-light {
+  background:white;
+  color:var(--forest);
+  border:1px solid var(--line);
+}
+.btn-light:hover {background:#edf3e9;border-color:#cbdac5}
+.btn:disabled {opacity:.55;cursor:not-allowed}
+
+.searchnote {
+  font-size:11px;
+  color:#c1d1c1;
+  margin:11px 0 0 5px;
+}
+
+.suggestions {
+  display:none;
+  position:absolute;
+  left:0;
+  right:0;
+  top:calc(100% + 8px);
+  background:white;
+  color:var(--ink);
+  border-radius:13px;
+  box-shadow:0 15px 40px #0003;
+  overflow:hidden;
+  max-height:340px;
+  overflow-y:auto;
+}
+
+.suggestion {
+  width:100%;
+  display:block;
+  text-align:left;
+  background:white;
+  border:0;
+  border-bottom:1px solid var(--line);
+  padding:14px 17px;
+}
+.suggestion:hover {background:#f0f4eb}
+.suggestion strong {
+  display:block;
+  font-size:13px;
+  margin-bottom:4px;
+}
+.suggestion span {
+  color:var(--muted);
+  font-size:11px;
+}
+.suggestion-message {
+  padding:16px;
+  font-size:12px;
+  color:var(--muted);
+}
+
+.error {
+  display:none;
+  margin-top:12px;
+  color:#ffd2c9;
+  font-size:12px;
+}
+
+.main {padding:30px 0 60px}
+
+.toolbar {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:20px;
+}
+
+.location-title {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-width:0;
+}
+
+.pin {
+  width:46px;
+  height:46px;
+  flex-shrink:0;
+  border-radius:15px;
+  background:linear-gradient(145deg,#e7f0e1,#d6e5d0);
+  display:grid;
+  place-items:center;
+  font-size:21px;
+  box-shadow:inset 0 1px 2px #fff,0 5px 13px #18372b12;
+}
+
+.location-title h2 {
+  font:700 20px Manrope;
+  margin:0;
+  letter-spacing:-.5px;
+}
+
+.location-title p {
+  margin:4px 0 0;
+  color:var(--muted);
+  font-size:11px;
+}
+
+.toolbar-actions {
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+
+.select {
+  border:1px solid var(--line);
+  background:var(--paper);
+  border-radius:10px;
+  padding:11px 12px;
+  color:var(--ink);
+  font-size:12px;
+  outline:none;
+}
+.select:focus {border-color:var(--moss);box-shadow:0 0 0 3px #66845c20}
+
+.card {
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:17px;
+  box-shadow:var(--shadow);
+  transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;
+  position:relative;
+}
+
+.card:hover {
+  transform:translateY(-5px);
+  box-shadow:var(--shadow-hover);
+  border-color:#cbd9c5;
+}
+
+.grid {
+  display:grid;
+  grid-template-columns:1.35fr .85fr;
+  gap:18px;
+}
+
+.conditions {
+  padding:22px;
+  overflow:hidden;
+}
+.conditions:before {
+  content:"";
+  position:absolute;
+  top:0;left:0;right:0;
+  height:4px;
+  background:linear-gradient(90deg,#66845c,#a9c69c);
+}
+
+.cardhead {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:18px;
+}
+
+.cardhead h3,.assessment h3,.maptop h3 {
+  font:700 15px Manrope;
+  margin:0;
+}
+
+.subtle {color:var(--muted);font-size:10px}
+
+.weather-main {
+  display:flex;
+  align-items:center;
+  gap:20px;
+  padding:4px 0 20px;
+}
+
+.weather-icon {
+  font-size:58px;
+  filter:drop-shadow(0 5px 5px #00000012);
+  animation:float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,100% {transform:translateY(0)}
+  50% {transform:translateY(-5px)}
+}
+
+.temp {
+  font:700 49px Manrope;
+  letter-spacing:-2px;
+}
+
+.weather-desc {font-weight:700;font-size:15px}
+.weather-feels {font-size:11px;color:var(--muted);margin-top:4px}
+
+.metrics {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:9px;
+  border-top:1px solid var(--line);
+  padding-top:17px;
+}
+
+.metric {
+  background:linear-gradient(145deg,#f8f9f4,#eff3eb);
+  border:1px solid #edf0e8;
+  border-radius:12px;
+  padding:13px 11px;
+  transition:.2s;
+}
+.metric:hover {background:#eaf1e5;transform:translateY(-3px)}
+
+.metric label {
+  display:block;
+  color:var(--muted);
+  font-size:10px;
+  margin-bottom:8px;
+}
+.metric strong {font:700 14px Manrope}
+.metric small {
+  display:block;
+  color:var(--muted);
+  font-size:10px;
+  margin-top:4px;
+}
+
+.assessment {
+  padding:22px;
+  background:linear-gradient(145deg,#f2f6ed,#e8f0e2);
+  border-color:#dce6d7;
+  overflow:hidden;
+}
+.assessment:before {
+  content:"";
+  position:absolute;
+  top:0;left:0;right:0;
+  height:4px;
+  background:linear-gradient(90deg,#9ab88a,#66845c);
+}
+.assessment-top {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+}
+.risk-pill {
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.4px;
+  border-radius:99px;
+  padding:7px 10px;
+  background:#e7d9b9;
+  color:#75531e;
+}
+.risk-pill.good {background:#dcebdc;color:#326344}
+.risk-pill.bad {background:#f1d9d4;color:#923e32}
+
+.assessment-lead {
+  font:700 19px/1.35 Manrope;
+  margin:19px 0 8px;
+}
+.assessment-copy {
+  font-size:12px;
+  color:#657267;
+  line-height:1.65;
+  margin:0;
+}
+.risk-list {margin-top:18px;display:grid;gap:10px}
+.risk-row {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+  border-top:1px solid #dce5d8;
+  padding-top:10px;
+  font-size:11px;
+}
+.risk-row span:first-child {color:#66756a}
+.risk-level {font-weight:700}
+.level-good {color:var(--green)}
+.level-mid {color:var(--amber)}
+.level-high {color:var(--red)}
+
+.section {margin-top:23px}
+.sectionhead {
+  display:flex;
+  justify-content:space-between;
+  align-items:end;
+  margin-bottom:12px;
+}
+.sectionhead h3 {font:700 17px Manrope;margin:0}
+.sectionhead p {margin:4px 0 0;font-size:11px;color:var(--muted)}
+
+.hourly {
+  padding:19px;
+  overflow:hidden;
+}
+.hours {
+  display:grid;
+  grid-template-columns:repeat(8,minmax(80px,1fr));
+  gap:8px;
+  overflow-x:auto;
+  padding:3px 3px 8px;
+}
+.hour {
+  background:linear-gradient(145deg,#f8f9f4,#f0f3eb);
+  border:1px solid #edf0e8;
+  border-radius:12px;
+  padding:12px 8px;
+  text-align:center;
+  min-width:80px;
+  transition:.2s;
+}
+.hour:hover {
+  background:#e7efe1;
+  transform:translateY(-4px);
+  box-shadow:0 7px 15px #18372b12;
+}
+.hour .time {font-size:10px;color:var(--muted)}
+.hour .ico {font-size:21px;margin:8px 0}
+.hour strong {font:700 15px Manrope}
+.hour small {
+  display:block;
+  color:var(--muted);
+  font-size:9px;
+  margin-top:7px;
+  line-height:1.5;
+}
+
+.terrain-grid {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+.terrain {
+  padding:20px;
+  overflow:hidden;
+}
+.terrain:after {
+  content:"";
+  position:absolute;
+  right:-22px;
+  bottom:-28px;
+  width:90px;
+  height:90px;
+  border-radius:50%;
+  background:#e7efe1;
+  opacity:.55;
+  transition:.3s;
+}
+.terrain:hover:after {transform:scale(1.5);opacity:.8}
+.terrain-icon {
+  font-size:27px;
+  display:inline-block;
+  transition:.25s;
+}
+.terrain:hover .terrain-icon {transform:scale(1.15) rotate(-5deg)}
+.terrain h4 {font:700 13px Manrope;margin:11px 0 6px}
+.terrain p {
+  font-size:11px;
+  color:var(--muted);
+  line-height:1.65;
+  margin:0;
+  position:relative;
+  z-index:1;
+}
+.tag {
+  display:inline-block;
+  margin-top:13px;
+  padding:6px 9px;
+  border-radius:7px;
+  font-size:10px;
+  font-weight:700;
+  background:#e5eddf;
+  color:#41634a;
+  position:relative;
+  z-index:1;
+}
+.tag.warn {background:#f2e8d4;color:#89601d}
+.tag.danger {background:#f2ded9;color:#9b493c}
+
+.mapcard {overflow:hidden}
+.maptop {
+  padding:19px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+.maptop h3 {margin-bottom:5px}
+.map-actions {display:flex;gap:7px;align-items:center}
+
+.static-map-wrap {
+  width:100%;
+  height:370px;
+  background:#e6eddf;
+  position:relative;
+  overflow:hidden;
+}
+#staticMap {
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.map-fallback {
+  display:none;
+  width:100%;
+  height:100%;
+  position:relative;
+  overflow:hidden;
+  background-color:#e8eee2;
+  background-image:
+    linear-gradient(35deg,transparent 47%,#fffefa 48%,#fffefa 51%,transparent 52%),
+    linear-gradient(115deg,transparent 45%,#fffefa 46%,#fffefa 49%,transparent 50%),
+    linear-gradient(75deg,transparent 62%,#c5d8b8 63%,#c5d8b8 68%,transparent 69%),
+    repeating-linear-gradient(0deg,transparent 0 55px,#d5e1cd 56px 58px);
+  background-size:320px 230px,270px 260px,390px 290px,100% 100%;
+}
+.map-fallback:before {
+  content:"";
+  position:absolute;
+  width:150px;height:150px;
+  background:#c9ddbf;
+  border-radius:45% 55% 62% 38%;
+  left:12%;top:13%;
+  opacity:.65;
+}
+.map-fallback:after {
+  content:"";
+  position:absolute;
+  width:190px;height:120px;
+  background:#d1e2c9;
+  border-radius:55% 45% 35% 65%;
+  right:9%;bottom:8%;
+  opacity:.8;
+}
+.fallback-label {
+  position:absolute;
+  z-index:2;
+  left:50%;top:50%;
+  transform:translate(-50%,-50%);
+  background:white;
+  border-radius:12px;
+  padding:13px 18px;
+  box-shadow:0 8px 25px #18372b22;
+  text-align:center;
+  font-size:12px;
+  font-weight:700;
+}
+.fallback-label span {
+  display:block;
+  color:var(--muted);
+  font-weight:400;
+  font-size:10px;
+  margin-top:4px;
+}
+.map-marker {
+  position:absolute;
+  z-index:3;
+  left:50%;top:35%;
+  transform:translate(-50%,-50%);
+  width:18px;height:18px;
+  border-radius:50% 50% 50% 0;
+  background:#b84c3e;
+  border:3px solid white;
+  box-shadow:0 3px 10px #0004;
+  rotate:-45deg;
+}
+.map-marker:after {
+  content:"";
+  position:absolute;
+  width:5px;height:5px;
+  background:white;
+  border-radius:50%;
+  top:4px;left:4px;
+}
+.mapnote {
+  padding:13px 16px;
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.6;
+  border-top:1px solid var(--line);
+  background:#fffefa;
+}
+
+.notice {
+  margin-top:18px;
+  background:#fff8e9;
+  border:1px solid #efdfbb;
+  border-radius:12px;
+  padding:15px 17px;
+  color:#755c2b;
+  font-size:11px;
+  line-height:1.7;
+  box-shadow:0 5px 15px #755c2b0a;
+}
+
+.footer {
+  background:var(--forest);
+  color:#cbd8ca;
+  padding:27px 0;
+  font-size:11px;
+}
+.footerin {
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  align-items:center;
+}
+.footer strong {color:white;font:700 13px Manrope}
+.updated {font-size:10px;color:var(--muted)}
+.loading {opacity:.65;pointer-events:none}
+.empty {padding:24px;text-align:center;color:var(--muted);font-size:12px}
+
+@keyframes appear {
+  from {opacity:0;transform:translateY(10px)}
+  to {opacity:1;transform:translateY(0)}
+}
+.main > .grid,.main > .section,.main > .notice {
+  animation:appear .5s ease both;
+}
+.main > .section:nth-of-type(2) {animation-delay:.06s}
+.main > .section:nth-of-type(3) {animation-delay:.12s}
+
+@media(max-width:850px) {
+  .grid {grid-template-columns:1fr}
+  .metrics {grid-template-columns:repeat(2,1fr)}
+  .terrain-grid {grid-template-columns:1fr 1fr}
+}
+@media(max-width:560px) {
+  .shell {padding:0 16px}
+  .nav {height:64px}
+  .navright {font-size:10px;gap:10px}
+  .hero {padding:38px 0 48px}
+  .hero h1 {letter-spacing:-1.5px}
+  .searchbar {flex-wrap:wrap}
+  .searchbar input {min-height:43px;flex-basis:100%}
+  .searchbar .btn {flex:1;padding:11px 8px}
+  .toolbar {align-items:flex-start;flex-direction:column}
+  .toolbar-actions {width:100%}
+  .toolbar-actions .select {flex:1;min-width:0}
+  .terrain-grid {grid-template-columns:1fr}
+  .footerin {align-items:flex-start;flex-direction:column}
+  .weather-main {gap:13px}
+  .temp {font-size:40px}
+  .maptop {align-items:flex-start;flex-direction:column}
+  .static-map-wrap {height:290px}
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+  <div class="shell nav">
+    <div class="brand">
+      <div class="brandmark">⌁</div>
+      <span>trail<em>wise</em></span>
+    </div>
+    <div class="navright">
+      <span><i class="live-dot"></i>Forecast updates</span>
+      <span>UK-wide</span>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="shell">
+    <div class="eyebrow">A clearer forecast for the outdoors</div>
+    <h1>Know the conditions.<br>Enjoy the journey.</h1>
+    <p>
+      Weather is only half the story. TrailWise translates forecasts into
+      practical walking insight — from muddy paths to exposed, windy hills.
+    </p>
+
+    <div class="search-area">
+      <div class="searchbar">
+        <input id="placeInput" value="Lake District"
+          placeholder="Search a town, mountain or area..."
+          aria-label="Search for a UK location"
+          autocomplete="off">
+        <button class="btn btn-primary" id="searchBtn">Find location ↗</button>
+        <button class="btn btn-ghost" id="locBtn">◎ My location</button>
+      </div>
+      <div class="suggestions" id="suggestions"></div>
+    </div>
+
+    <div class="searchnote">
+      Search anywhere in England, Scotland, Wales or Northern Ireland.
+      Select a result to update your forecast.
+    </div>
+    <div class="error" id="searchError"></div>
+  </div>
+</section>
+
+<main class="main shell">
+
+  <div class="toolbar">
+    <div class="location-title">
+      <div class="pin">⌖</div>
+      <div>
+        <h2 id="placeTitle">Lake District</h2>
+        <p>
+          <span id="locationDescription">Selected weather location</span>
+          · <span id="updated">Fetching forecast...</span>
+        </p>
+      </div>
+    </div>
+
+    <div class="toolbar-actions">
+      <select class="select" id="terrainSelect" aria-label="Choose walking terrain">
+        <option value="mixed">Mixed walking</option>
+        <option value="coastal">Coastal path</option>
+        <option value="hill">Hill / mountain</option>
+        <option value="woodland">Woodland</option>
+        <option value="lowland">Lowland / field</option>
+      </select>
+      <button class="btn btn-light" id="refreshBtn">↻ Refresh</button>
+    </div>
+  </div>
+
+  <div class="grid">
+    <section class="card conditions">
+      <div class="cardhead">
+        <h3>Weather right now</h3>
+        <span class="subtle">Latest forecast conditions</span>
+      </div>
+
+      <div class="weather-main">
+        <div class="weather-icon" id="weatherIcon">⛅</div>
+        <div>
+          <div class="temp">
+            <span id="temp">—</span><span style="font-size:20px;vertical-align:top">°</span>
+          </div>
+          <div class="weather-desc" id="weatherDesc">Loading forecast</div>
+          <div class="weather-feels">
+            Feels like <strong id="feels">—</strong>°C
+            · <span id="daylight">—</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="metrics">
+        <div class="metric">
+          <label>Wind speed</label>
+          <strong id="wind">—</strong>
+          <small id="windDir">—</small>
+        </div>
+        <div class="metric">
+          <label>Wind gusts</label>
+          <strong id="gust">—</strong>
+          <small>km/h</small>
+        </div>
+        <div class="metric">
+          <label>Next 24 hours rain</label>
+          <strong id="rain">—</strong>
+          <small>mm forecast</small>
+        </div>
+        <div class="metric">
+          <label>Visibility</label>
+          <strong id="visibility">—</strong>
+          <small>Estimated range</small>
+        </div>
+      </div>
+    </section>
+
+    <section class="card assessment">
+      <div class="assessment-top">
+        <h3>Walking outlook</h3>
+        <span class="risk-pill" id="overallPill">ASSESSING</span>
+      </div>
+      <div class="assessment-lead" id="assessmentLead">Checking the forecast...</div>
+      <p class="assessment-copy" id="assessmentCopy">
+        Your walking outlook will appear here.
+      </p>
+      <div class="risk-list">
+        <div class="risk-row">
+          <span>Wet ground / mud potential</span>
+          <span class="risk-level" id="mudRisk">—</span>
+        </div>
+        <div class="risk-row">
+          <span>Wind exposure</span>
+          <span class="risk-level" id="windRisk">—</span>
+        </div>
+        <div class="risk-row">
+          <span>Visibility</span>
+          <span class="risk-level" id="visRisk">—</span>
+        </div>
+        <div class="risk-row">
+          <span>Rain in next 6 hours</span>
+          <span class="risk-level" id="rainRisk">—</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <section class="section card hourly">
+    <div class="sectionhead">
+      <div>
+        <h3>Next 24 hours</h3>
+        <p>See when conditions might be better for your walk.</p>
+      </div>
+      <span class="subtle">3-hour intervals</span>
+    </div>
+    <div class="hours" id="hours">
+      <div class="empty">Loading hourly forecast...</div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="sectionhead">
+      <div>
+        <h3>What the weather means for your walk</h3>
+        <p>Practical advice based on your selected terrain.</p>
+      </div>
+    </div>
+
+    <div class="terrain-grid">
+      <div class="card terrain">
+        <div class="terrain-icon">🥾</div>
+        <h4>Path surface</h4>
+        <p id="surfaceText">Assessing recent rainfall.</p>
+        <span class="tag" id="surfaceTag">Calculating</span>
+      </div>
+      <div class="card terrain">
+        <div class="terrain-icon">🌬️</div>
+        <h4>Exposed sections</h4>
+        <p id="exposureText">Assessing wind and gusts.</p>
+        <span class="tag" id="exposureTag">Calculating</span>
+      </div>
+      <div class="card terrain">
+        <div class="terrain-icon">🌫️</div>
+        <h4>Visibility & navigation</h4>
+        <p id="navText">Assessing visibility.</p>
+        <span class="tag" id="navTag">Calculating</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section card mapcard">
+    <div class="maptop">
+      <div>
+        <h3>Explore the area</h3>
+        <span class="subtle">A map of your selected location</span>
+      </div>
+      <div class="map-actions">
+        <button class="btn btn-light" id="openMapBtn">Explore on OpenStreetMap ↗</button>
+      </div>
+    </div>
+
+    <div class="static-map-wrap">
+      <img id="staticMap" alt="Map showing the selected location" />
+      <div class="map-fallback" id="mapFallback">
+        <div class="map-marker"></div>
+        <div class="fallback-label">
+          <span id="fallbackPlace">Selected location</span>
+          Map preview unavailable
+        </div>
+      </div>
+    </div>
+
+    <div class="mapnote">
+      The map shows the general area around your selected weather location.
+      It is a static preview, not a live tracking map or a verified walking route.
+      Use OpenStreetMap to explore streets and nearby places in more detail.
+    </div>
+  </section>
+
+  <div class="notice">
+    <strong>Important — understanding your walking outlook</strong><br>
+    Weather information comes from Open-Meteo forecast data. It is not
+    a direct reading from a weather station at every searched location.
+    Mud and wet-ground ratings are estimates based on recent rainfall,
+    forecast rainfall and available soil-moisture data.
+    Wind exposure also varies with elevation and surrounding landscape.
+    TrailWise does not currently verify path closures, flooding,
+    landslips or actual ground conditions. Always check local notices
+    and official weather warnings before setting out.
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="shell footerin">
+    <div>
+      <strong>trailwise</strong><br>
+      Weather that understands the outdoors.
+    </div>
+    <div>UK-wide prototype · Open-Meteo · OpenStreetMap</div>
+    <div id="sourceStatus">Waiting for forecast...</div>
+  </div>
+</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+
+let place = {
+  name:"Lake District",
+  admin:"United Kingdom",
+  lat:54.4609,
+  lon:-3.0886,
+  source:"Search location"
+};
+
+let weatherData = null;
+let searchTimer;
+let requestNumber = 0;
+let weatherRequestNumber = 0;
+
+const terrainNames = {
+  mixed:"mixed walking terrain",
+  coastal:"coastal paths",
+  hill:"hills and mountain paths",
+  woodland:"woodland trails",
+  lowland:"lowland and field paths"
+};
+
+function weatherInfo(code) {
+  if(code===0) return ["☀️","Clear skies"];
+  if([1,2].includes(code)) return ["🌤️","Partly cloudy"];
+  if(code===3) return ["☁️","Overcast"];
+  if([45,48].includes(code)) return ["🌫️","Foggy"];
+  if([51,53,55,56,57].includes(code)) return ["🌦️","Drizzle"];
+  if([61,63,65,66,67].includes(code)) return ["🌧️","Rain"];
+  if([71,73,75,77,85,86].includes(code)) return ["🌨️","Snow / wintry showers"];
+  if([80,81,82].includes(code)) return ["🌦️","Rain showers"];
+  if([95,96,99].includes(code)) return ["⛈️","Thunderstorms"];
+  return ["🌥️","Changeable"];
+}
+
+function riskLabel(value, thresholds) {
+  return value >= thresholds[1] ? "High" :
+         value >= thresholds[0] ? "Elevated" : "Low";
+}
+
+function setTag(id,text,kind) {
+  $(id).textContent = text;
+  $(id).className = "tag" +
+    (kind==="warn" ? " warn" :
+     kind==="danger" ? " danger" : "");
+}
+
+function setRisk(id,text) {
+  const el = $(id);
+  el.textContent = text;
+  el.className = "risk-level " +
+    (text==="Low" ? "level-good" :
+     text==="High" ? "level-high" : "level-mid");
+}
+
+function showError(message) {
+  $("searchError").textContent = message;
+  $("searchError").style.display = "block";
+}
+
+function clearError() {
+  $("searchError").textContent = "";
+  $("searchError").style.display = "none";
+}
+
+function hideSuggestions() {
+  $("suggestions").style.display = "none";
+}
+
+function showSuggestions(results) {
+  const container = $("suggestions");
+  container.replaceChildren();
+
+  if(!results.length) {
+    const message = document.createElement("div");
+    message.className = "suggestion-message";
+    message.textContent = "No matching UK locations found. Try a nearby town or landmark.";
+    container.appendChild(message);
+    container.style.display = "block";
+    return;
+  }
+
+  results.forEach(item => {
+    const button = document.createElement("button");
+    button.className = "suggestion";
+
+    const name = document.createElement("strong");
+    name.textContent = item.name;
+
+    const detail = document.createElement("span");
+    detail.textContent = [
+      item.admin2,
+      item.admin1,
+      item.country
+    ].filter(Boolean).join(", ");
+
+    button.append(name,detail);
+    button.addEventListener("click", () => selectLocation(item));
+    container.appendChild(button);
+  });
+
+  container.style.display = "block";
+}
+
+async function findLocations(query) {
+  const thisRequest = ++requestNumber;
+
+  if(query.length < 2) {
+    hideSuggestions();
+    return;
+  }
+
+  const container = $("suggestions");
+  container.innerHTML = '<div class="suggestion-message">Searching UK locations...</div>';
+  container.style.display = "block";
+
+  try {
+    const url =
+      "https://geocoding-api.open-meteo.com/v1/search?" +
+      new URLSearchParams({
+        name:query,
+        count:10,
+        language:"en",
+        format:"json"
+      });
+
+    const response = await fetch(url);
+    if(!response.ok) throw Error("Search service unavailable.");
+
+    const data = await response.json();
+    if(thisRequest !== requestNumber) return;
+
+    const results = (data.results || []).filter(x => x.country_code === "GB");
+    showSuggestions(results);
+
+  } catch(error) {
+    if(thisRequest !== requestNumber) return;
+    container.innerHTML =
+      '<div class="suggestion-message">Could not search right now. Please try again.</div>';
+  }
+}
+
+async function selectLocation(item) {
+  place = {
+    name:item.name,
+    admin:[item.admin2,item.admin1,item.country].filter(Boolean).join(", "),
+    lat:item.latitude,
+    lon:item.longitude,
+    source:"Search location"
+  };
+
+  $("placeInput").value = item.name;
+  hideSuggestions();
+  clearError();
+
+  await loadWeather();
+}
+
+async function searchPlace() {
+  const query = $("placeInput").value.trim();
+
+  if(!query) {
+    showError("Please enter a location first.");
+    return;
+  }
+
+  clearError();
+  hideSuggestions();
+  $("searchBtn").disabled = true;
+  $("searchBtn").textContent = "Searching...";
+
+  try {
+    const url =
+      "https://geocoding-api.open-meteo.com/v1/search?" +
+      new URLSearchParams({
+        name:query,
+        count:10,
+        language:"en",
+        format:"json"
+      });
+
+    const response = await fetch(url);
+    if(!response.ok) throw Error("Location search is unavailable.");
+
+    const data = await response.json();
+    const results = (data.results || []).filter(x => x.country_code === "GB");
+
+    if(!results.length) {
+      throw Error("No UK locations found. Try a nearby town or mountain.");
+    }
+
+    showSuggestions(results);
+
+    if(results.length === 1) {
+      selectLocation(results[0]);
+    } else {
+      $("searchError").textContent =
+        "Choose the correct location from the suggestions above.";
+      $("searchError").style.display = "block";
+    }
+
+  } catch(error) {
+    showError(error.message);
+  } finally {
+    $("searchBtn").disabled = false;
+    $("searchBtn").textContent = "Find location ↗";
+  }
+}
+
+/* Static map preview */
+function updateMap() {
+  const img = $("staticMap");
+  const fallback = $("mapFallback");
+
+  $("fallbackPlace").textContent = place.name;
+
+  fallback.style.display = "none";
+  img.style.display = "block";
+
+  const lat = place.lat;
+  const lon = place.lon;
+
+  // A static map image centred on the selected coordinates.
+  // This does not create an interactive or tracking map.
+  const mapUrl =
+    "https://staticmap.openstreetmap.de/staticmap.php?" +
+    new URLSearchParams({
+      center:lat + "," + lon,
+      zoom:"11",
+      size:"1000x500",
+      maptype:"mapnik",
+      markers:lat + "," + lon + ",red-pushpin"
+    });
+
+  img.onerror = () => {
+    img.style.display = "none";
+    fallback.style.display = "block";
+  };
+
+  img.onload = () => {
+    img.style.display = "block";
+    fallback.style.display = "none";
+  };
+
+  img.src = mapUrl;
+}
+
+function openFullMap() {
+  const url =
+    "https://www.openstreetmap.org/#map=12/" +
+    place.lat + "/" + place.lon;
+
+  window.open(url,"_blank","noopener");
+}
+
+async function loadWeather() {
+  const thisWeatherRequest = ++weatherRequestNumber;
+
+  document.body.classList.add("loading");
+  $("updated").textContent = "Updating forecast...";
+  $("sourceStatus").textContent = "Connecting to weather service...";
+
+  try {
+    const params = new URLSearchParams({
+      latitude:place.lat,
+      longitude:place.lon,
+      current:[
+        "temperature_2m",
+        "relative_humidity_2m",
+        "apparent_temperature",
+        "is_day",
+        "precipitation",
+        "rain",
+        "weather_code",
+        "wind_speed_10m",
+        "wind_direction_10m",
+        "wind_gusts_10m"
+      ].join(","),
+      hourly:[
+        "temperature_2m",
+        "precipitation_probability",
+        "precipitation",
+        "rain",
+        "weather_code",
+        "wind_speed_10m",
+        "wind_gusts_10m",
+        "visibility",
+        "soil_moisture_0_to_7cm"
+      ].join(","),
+      past_days:2,
+      forecast_days:3,
+      timezone:"auto",
+      wind_speed_unit:"kmh"
+    });
+
+    const response = await fetch(
+      "https://api.open-meteo.com/v1/forecast?" + params
+    );
+
+    if(!response.ok) throw Error("Weather service unavailable. Please try again.");
+
+    const data = await response.json();
+
+    if(thisWeatherRequest !== weatherRequestNumber) return;
+    if(!data.current || !data.hourly) throw Error("Weather information was incomplete.");
+
+    weatherData = data;
+    renderWeather(data);
+
+    $("placeTitle").textContent =
+      place.name + (place.admin ? ", " + place.admin : "");
+    $("locationDescription").textContent = place.source;
+
+    $("updated").textContent =
+      "Forecast checked " +
+      new Date().toLocaleTimeString([],{
+        hour:"2-digit",
+        minute:"2-digit"
+      });
+
+    $("sourceStatus").textContent = "Forecast received · Open-Meteo";
+    updateMap();
+
+  } catch(error) {
+    if(thisWeatherRequest !== weatherRequestNumber) return;
+
+    $("updated").textContent = "Update failed";
+    $("sourceStatus").textContent = "Weather feed unavailable";
+    $("assessmentLead").textContent =
+      "We couldn't retrieve the latest forecast.";
+    $("assessmentCopy").textContent =
+      error.message + " Check your connection and refresh.";
+    $("hours").innerHTML =
+      '<div class="empty">Forecast unavailable. Please refresh.</div>';
+
+  } finally {
+    if(thisWeatherRequest === weatherRequestNumber) {
+      document.body.classList.remove("loading");
+    }
+  }
+}
+
+function renderWeather(data) {
+  const c = data.current;
+  const h = data.hourly;
+  const [icon,description] = weatherInfo(c.weather_code);
+
+  $("weatherIcon").textContent = icon;
+  $("temp").textContent = Math.round(c.temperature_2m);
+  $("weatherDesc").textContent = description;
+  $("feels").textContent = Math.round(c.apparent_temperature);
+  $("daylight").textContent = c.is_day ? "Daylight" : "Night-time";
+
+  $("wind").textContent = Math.round(c.wind_speed_10m) + " km/h";
+  $("windDir").textContent = "Direction " + Math.round(c.wind_direction_10m) + "°";
+  $("gust").textContent = Math.round(c.wind_gusts_10m);
+
+  // Find the current hour in the API's local timezone.
+  let idx = h.time.findIndex(t => t >= c.time);
+  if(idx < 0) idx = 0;
+
+  const pastStart = Math.max(0,idx-24);
+
+  const rainPast = h.precipitation
+    .slice(pastStart,idx)
+    .reduce((a,b) => a + (b || 0),0);
+
+  const rain6 = h.precipitation
+    .slice(idx,Math.min(idx+6,h.time.length))
+    .reduce((a,b) => a + (b || 0),0);
+
+  const rain24 = h.precipitation
+    .slice(idx,Math.min(idx+24,h.time.length))
+    .reduce((a,b) => a + (b || 0),0);
+
+  $("rain").textContent = rain24.toFixed(1);
+
+  const visibility = h.visibility[idx] ?? 10000;
+  $("visibility").textContent = visibility >= 1000
+    ? (visibility/1000).toFixed(1) + " km"
+    : Math.round(visibility) + " m";
+
+  const terrain = $("terrainSelect").value;
+  const gust = c.wind_gusts_10m;
+  const soil = h.soil_moisture_0_to_7cm?.[idx] ?? null;
+
+  const wetScore =
+    rainPast + rain6 * 0.7 +
+    (soil !== null ? soil * 12 : 0);
+
+  const terrainWind =
+    terrain === "hill" ? 1.25 :
+    terrain === "coastal" ? 1.18 :
+    terrain === "woodland" ? 0.72 :
+    terrain === "lowland" ? 0.85 : 1;
+
+  const windScore = gust * terrainWind;
+
+  const mud = riskLabel(wetScore,[4,12]);
+  const windLevel = riskLabel(windScore,[30,48]);
+
+  const visibilityKm = visibility/1000;
+  const visLevel = visibilityKm < 1
+    ? "High" :
+    visibilityKm < 4 ? "Elevated" : "Low";
+
+  const rainLevel = rain6 >= 5
+    ? "High" :
+    rain6 >= 1.5 ? "Elevated" : "Low";
+
+  const risks = [mud,windLevel,visLevel,rainLevel];
+  const hasHigh = risks.includes("High");
+  const hasElevated = risks.includes("Elevated");
+
+  const overall = hasHigh
+    ? "Take extra care"
+    : hasElevated
+      ? "Some caution"
+      : "Generally favourable";
+
+  const pill = $("overallPill");
+  pill.textContent = overall.toUpperCase();
+  pill.className = "risk-pill" +
+    (hasHigh ? " bad" : hasElevated ? "" : " good");
+
+  $("assessmentLead").textContent = hasHigh
+    ? "Some conditions could make your walk challenging."
+    : hasElevated
+      ? "There are a few things to consider before setting out."
+      : "The forecast looks relatively settled for a walk.";
+
+  const bits = [];
+
+  if(mud !== "Low")
+    bits.push("recent or forecast rainfall may leave softer ground");
+
+  if(windLevel !== "Low")
+    bits.push(
+      terrain === "hill" || terrain === "coastal"
+        ? "gusts may be more noticeable on exposed sections"
+        : "wind may affect comfort on open sections"
+    );
+
+  if(visLevel !== "Low")
+    bits.push("reduced visibility could make navigation harder");
+
+  if(rainLevel !== "Low")
+    bits.push("showers are expected during the next six hours");
+
+  $("assessmentCopy").textContent = bits.length
+    ? "For " + terrainNames[terrain] + ", " + bits.join("; ") + "."
+    : "No major weather-related concerns are indicated by this forecast. Remember that actual path conditions can differ.";
+
+  setRisk("mudRisk",mud);
+  setRisk("windRisk",windLevel);
+  setRisk("visRisk",visLevel);
+  setRisk("rainRisk",rainLevel);
+
+  // Path surface advice
+  if(rainPast > 5) {
+    $("surfaceText").textContent =
+      "There has been notable rainfall recently. Unpaved paths may be wet or muddy, particularly in poorly drained areas.";
+  } else if(rain6 > 1) {
+    $("surfaceText").textContent =
+      "Rain is forecast soon. Earth, grass and uneven paths could become slippery.";
+  } else {
+    $("surfaceText").textContent =
+      "Recent rainfall is relatively low. Shaded or poorly drained paths may still be damp.";
+  }
+
+  setTag(
+    "surfaceTag",
+    mud === "High" ? "Higher mud potential" :
+    mud === "Elevated" ? "Some wet ground possible" :
+    "Lower mud potential",
+    mud === "High" ? "danger" :
+    mud === "Elevated" ? "warn" : "good"
+  );
+
+  // Wind advice
+  $("exposureText").textContent = gust >= 45
+    ? "Strong gusts are forecast. Exposed ridges, summits and open coastal sections may feel particularly uncomfortable."
+    : gust >= 30
+      ? "Breezy conditions are expected. Wind may feel stronger in open or elevated locations."
+      : "Wind is relatively light at this location. Exposed areas can still experience stronger gusts.";
+
+  setTag(
+    "exposureTag",
+    windLevel === "High" ? "Strong gusts" :
+    windLevel === "Elevated" ? "Breezy conditions" :
+    "Lower wind risk",
+    windLevel === "High" ? "danger" :
+    windLevel === "Elevated" ? "warn" : "good"
+  );
+
+  // Visibility advice
+  $("navText").textContent = visibilityKm < 1
+    ? "Visibility is very poor in the forecast. Navigation could be difficult, particularly in unfamiliar or elevated terrain."
+    : visibilityKm < 4
+      ? "Visibility may be reduced. Keep a map available and allow extra time."
+      : "Forecast visibility is good at this location. Mountain and coastal weather can still change quickly.";
+
+  setTag(
+    "navTag",
+    visLevel === "High" ? "Poor visibility" :
+    visLevel === "Elevated" ? "Reduced visibility" :
+    "Good visibility",
+    visLevel === "High" ? "danger" :
+    visLevel === "Elevated" ? "warn" : "good"
+  );
+
+  // Hourly forecast
+  const hoursContainer = $("hours");
+  hoursContainer.replaceChildren();
+
+  for(let i=idx;i<Math.min(idx+24,h.time.length);i+=3) {
+    const date = new Date(h.time[i]);
+    const [weatherIcon] = weatherInfo(h.weather_code[i]);
+
+    const hour = document.createElement("div");
+    hour.className = "hour";
+
+    const time = document.createElement("div");
+    time.className = "time";
+    time.textContent = date.toLocaleTimeString([],{
+      hour:"2-digit",
+      minute:"2-digit"
+    });
+
+    const iconEl = document.createElement("div");
+    iconEl.className = "ico";
+    iconEl.textContent = weatherIcon;
+
+    const tempEl = document.createElement("strong");
+    tempEl.textContent = Math.round(h.temperature_2m[i]) + "°";
+
+    const details = document.createElement("small");
+    details.textContent =
+      "Rain " + Math.round(h.precipitation_probability[i] || 0) +
+      "% · Wind " + Math.round(h.wind_speed_10m[i]) + " km/h";
+
+    hour.append(time,iconEl,tempEl,details);
+    hoursContainer.appendChild(hour);
+  }
+
+  if(!hoursContainer.children.length) {
+    hoursContainer.innerHTML =
+      '<div class="empty">Hourly forecast unavailable.</div>';
+  }
+}
+
+// Search input and suggestions
+$("placeInput").addEventListener("input",() => {
+  clearTimeout(searchTimer);
+  clearError();
+  const query = $("placeInput").value.trim();
+  searchTimer = setTimeout(() => findLocations(query),350);
+});
+
+$("placeInput").addEventListener("keydown",event => {
+  if(event.key === "Enter") {
+    event.preventDefault();
+    searchPlace();
+  }
+  if(event.key === "Escape") hideSuggestions();
+});
+
+$("searchBtn").addEventListener("click",searchPlace);
+
+document.addEventListener("click",event => {
+  if(!event.target.closest(".search-area")) hideSuggestions();
+});
+
+// Refresh
+$("refreshBtn").addEventListener("click",loadWeather);
+
+// Terrain selection
+$("terrainSelect").addEventListener("change",() => {
+  if(weatherData) renderWeather(weatherData);
+});
+
+// Map control
+$("openMapBtn").addEventListener("click",openFullMap);
+
+// Device location
+$("locBtn").addEventListener("click",() => {
+  clearError();
+
+  if(!navigator.geolocation) {
+    showError("Your browser does not support location services.");
+    return;
+  }
+
+  $("locBtn").disabled = true;
+  $("locBtn").textContent = "Locating...";
+
+  navigator.geolocation.getCurrentPosition(async position => {
+    place = {
+      name:"Your device location",
+      admin:"GPS coordinates",
+      lat:position.coords.latitude,
+      lon:position.coords.longitude,
+      source:"Your device location"
+    };
+
+    $("placeInput").value = "Your location";
+    hideSuggestions();
+
+    await loadWeather();
+
+    $("locBtn").disabled = false;
+    $("locBtn").textContent = "◎ My location";
+
+  },error => {
+    const message = error.code === 1
+      ? "Location permission was denied. Allow location access in your browser settings, or search for a place instead."
+      : error.code === 2
+        ? "Your device couldn't determine your location. Try searching for a town instead."
+        : "Location took too long to load. Please try again.";
+
+    showError(message);
+    $("locBtn").disabled = false;
+    $("locBtn").textContent = "◎ My location";
+
+  },{
+    enableHighAccuracy:true,
+    timeout:15000,
+    maximumAge:60000
+  });
+});
+
+// Initial forecast
+updateMap();
+loadWeather();
+
+// Refresh every 15 minutes when the page is visible.
+setInterval(() => {
+  if(!document.hidden) loadWeather();
+},15*60*1000);
+</script>
+</body>
+</html>
